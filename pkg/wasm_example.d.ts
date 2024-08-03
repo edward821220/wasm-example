@@ -1,8 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
-* @param {bigint} a
-* @param {bigint} b
-* @returns {bigint}
+* @param {number} limit
+* @returns {number}
 */
-export function sum(a: bigint, b: bigint): bigint;
+export function count_primes_wasm(limit: number): number;

@@ -4,12 +4,11 @@ export function __wbg_set_wasm(val) {
 }
 
 /**
-* @param {bigint} a
-* @param {bigint} b
-* @returns {bigint}
+* @param {number} limit
+* @returns {number}
 */
-export function sum(a, b) {
-    const ret = wasm.sum(a, b);
-    return BigInt.asUintN(64, ret);
+export function count_primes_wasm(limit) {
+    const ret = wasm.count_primes_wasm(limit);
+    return ret >>> 0;
 }
 

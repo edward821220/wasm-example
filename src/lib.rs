@@ -1,6 +1,32 @@
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-pub fn sum(a: u64, b: u64) -> u64 {
-    a + b
+pub fn count_primes_wasm(limit: u32) -> u32 {
+    let mut count = 0;
+    for n in 2..=limit {
+        if is_prime(n) {
+            count += 1;
+        }
+    }
+    count
+}
+
+fn is_prime(n: u32) -> bool {
+    if n <= 1 {
+        return false;
+    }
+    if n <= 3 {
+        return true;
+    }
+    if n % 2 == 0 || n % 3 == 0 {
+        return false;
+    }
+    let mut i = 5;
+    while i * i <= n {
+        if n % i == 0 || n % (i + 2) == 0 {
+            return false;
+        }
+        i += 6;
+    }
+    true
 }

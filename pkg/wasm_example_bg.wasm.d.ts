@@ -1,4 +1,4 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
-export function sum(a: number, b: number): number;
+export function count_primes_wasm(a: number): number;

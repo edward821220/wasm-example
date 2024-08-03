@@ -1,16 +1,50 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
-import { sum } from "wasm-example";
+import { count_primes_wasm } from "wasm-example";
 import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0);
+function isPrime(n: number): boolean {
+  if (n <= 1) return false;
+  if (n <= 3) return true;
+  if (n % 2 === 0 || n % 3 === 0) return false;
 
-  useEffect(() => {
-    const result = sum(64n, 64n);
-    console.log(result);
-  }, []);
+  let i = 5;
+  while (i * i <= n) {
+    if (n % i === 0 || n % (i + 2) === 0) return false;
+    i += 6;
+  }
+  return true;
+}
+
+function countPrimes(limit: number): number {
+  let count = 0;
+  for (let n = 2; n <= limit; n++) {
+    if (isPrime(n)) {
+      count += 1;
+    }
+  }
+  return count;
+}
+
+function App() {
+  const [timeTakenNative, setTimeTakenNative] = useState(0);
+  const [timeTakenWasm, setTimeTakenWasm] = useState(0);
+
+  const handleClickNative = () => {
+    const startTime = performance.now();
+    console.log(countPrimes(80000000));
+    const endTime = performance.now();
+    const timeTaken = (endTime - startTime) / 1000;
+    setTimeTakenNative(timeTaken);
+  };
+  const handleClickWasm = () => {
+    const startTime = performance.now();
+    console.log(count_primes_wasm(80000000));
+    const endTime = performance.now();
+    const timeTaken = (endTime - startTime) / 1000;
+    setTimeTakenWasm(timeTaken);
+  };
 
   return (
     <>
@@ -24,12 +58,12 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        Native:{" "}
+        <button onClick={handleClickNative}>Time is {timeTakenNative} s</button>
+      </div>
+      <div className="card">
+        Wasm:{" "}
+        <button onClick={handleClickWasm}>Time is {timeTakenWasm} s</button>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
